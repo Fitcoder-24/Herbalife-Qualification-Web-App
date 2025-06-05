@@ -1,4 +1,6 @@
-# Herbalife Qualification Web App
+# Herbalife Qualification Web App 
+## Demo click the link below
+(https://script.google.com/macros/s/AKfycbxxW0MwOzfGfR1UIBMYZZpEMWhRPxN6iO9YbD30InkBcYvwuRGBy9b9m5FSHQY1X8IVpQ/exec)
 
 A Google Apps Script web app that helps Herbalife distributors quickly check their qualification status based on Volume Points (VP).
 
