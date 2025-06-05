@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>May month offers Tracking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #f5f5f5;
+      color: #333;
+      text-align: center;
+    }
+    header {
+      padding: 40px;
+    }
+    header img {
+      height: 100px;
+    }
+    h1 {
+      font-size: 32px;
+      margin: 10px 0;
+    }
+    h2 {
+      font-size: 15px;
+      font-family: italic;
+    }
+    .search-section {
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      margin: 5px;
+      font-size: 16px;
+    }
+    .loading {
+      margin-top: 10px;
+      font-style: italic;
+      color: #4CAF50;
+    }
+    .card {
+      background: white;
+      margin: 20px auto;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+      width: 95%;
+      max-width: 350px;
+      text-align: left;
+      word-wrap: break-word;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 15px;
+    }
+    .reward-status {
+      margin-top: 20px;
+    }
+    .reward-status .row span {
+      font-weight: bold;
+    }
+    .badge {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    .qualified {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .pending {
+      background-color: #f39c12;
+      color: white;
+    }
+    .disabled {
+      background-color: #ccc;
+      color: #666;
+    }
+    .note {
+      margin-top: 20px;
+      background-color: #eaf7ea;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .download-btn {
+      margin-top: 15px;
+      width: 100%;
+      font-size: 16px;
+    }
+    footer {
+  margin: 40px 0 20px;
+  font-size: 14px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-badge {
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: linear-gradient(270deg, #6a11cb, #2575fc, #6a11cb);
+  background-size: 600% 600%;
+  animation: animatedBackground 8s ease infinite, pulse 3s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(106, 17, 203, 0.5);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.footer-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(106, 17, 203, 0.7), 0 0 30px rgba(37, 117, 252, 0.5);
+}
+
+@keyframes animatedBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+    /* Popup notification styling */
+    #popupNotification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 20px;
+      font-size: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+      z-index: 9999;
+      user-select: none;
+    }
+    #popupNotification.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://i.ibb.co/BKvtwBFd/Untitled-design-17.png" alt="Herbalife Logo" />
+    <h1>May Month offers Tracking</h1>
+    <h2>Co-powered by Fit India Club Dhampur<h2>
+  </header>
+
+  <div class="search-section">
+    <input type="text" id="searchInput" placeholder="Enter ID or Name" />
+    <button onclick="searchUser()">Search</button>
+    <div id="loading" class="loading" style="display: none;">🔍 Searching...</div>
+  </div>
+
+  <div id="results"></div>
+
+  <div id="popupNotification"></div>
+
+  <footer>
+  <div class="footer-badge">Developed by Rishabh Kumar</div>
+</footer>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    function searchUser() {
+      const query = document.getElementById("searchInput").value.trim();
+      if (!query) return alert("Please enter a name or ID");
+
+      document.getElementById("loading").style.display = "block";
+      document.getElementById("results").innerHTML = "";
+
+      google.script.run.withSuccessHandler(showResults).searchUser(query);
+    }
+
+    function showResults(dataArray) {
+      document.getElementById("loading").style.display = "none";
+      const resultsDiv = document.getElementById("results");
+
+      if (!dataArray || dataArray.length === 0) {
+        alert("कोई रिकॉर्ड नहीं मिला।");
+        return;
+      }
+
+      dataArray.forEach(data => {
+        const vp = data.vp;
+        let qualified = null;
+        if (vp >= 1000) qualified = "formula";
+        else if (vp >= 500) qualified = "dinoshake";
+        else if (vp >= 300) qualified = "afresh";
+
+        const afreshStatus = qualified === "afresh" ? "Qualified" : qualified ? "Not Eligible" : `Left ${300 - vp} VP`;
+        const dinoshakeStatus = qualified === "dinoshake" ? "Qualified" : qualified === "formula" ? "Not Eligible" : `Left ${500 - vp} VP`;
+        const formulaStatus = qualified === "formula" ? "Qualified" : `Left ${1000 - vp} VP`;
+
+        const afreshClass = qualified === "afresh" ? "qualified" : qualified ? "disabled" : "pending";
+        const dinoshakeClass = qualified === "dinoshake" ? "qualified" : qualified === "formula" ? "disabled" : "pending";
+        const formulaClass = qualified === "formula" ? "qualified" : "pending";
+
+        let note = "";
+        if (qualified === "formula") {
+          note = "🎉 बधाई हो! आपने Formula 1 जीत लिया है!";
+        } else if (qualified === "dinoshake") {
+          note = `🎉 बधाई हो! आपने Dinoshake जीत लिया है! Formula 1 के लिए केवल ${1000 - vp} वॉल्यूम और चाहिए।`;
+        } else if (qualified === "afresh") {
+          note = `🎉 बधाई हो! आपने Afresh जीत लिया है! Dinoshake के लिए केवल ${500 - vp} वॉल्यूम और चाहिए।`;
+        } else {
+          note = `🔔 आप पहले Afresh जीत सकते हैं। केवल ${300 - vp} वॉल्यूम और चाहिए।`;
+        }
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <div class="row"><strong>ID:</strong> <span>${data.id}</span></div>
+          <div class="row"><strong>Name:</strong> <span>${data.name}</span></div>
+          <div class="row"><strong>Sponsor:</strong> <span>${data.sponsor}</span></div>
+          <div class="row"><strong>Team Level:</strong> <span>${data.teamLevel}</span></div>
+
+          <div class="reward-status">
+            <div class="row">Afresh: <span class="badge ${afreshClass}">${afreshStatus}</span></div>
+            <div class="row">Dinoshake: <span class="badge ${dinoshakeClass}">${dinoshakeStatus}</span></div>
+            <div class="row">Formula 1: <span class="badge ${formulaClass}">${formulaStatus}</span></div>
+          </div>
+          <div class="note">${note}</div>
+          <button class="download-btn" onclick="downloadCard(this)">Download Result</button>
+        `;
+        resultsDiv.appendChild(card);
+      });
+    }
+
+    function downloadCard(button) {
+      const card = button.parentElement;
+      html2canvas(card).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "reward-result.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+
+    // === RANDOM POPUP NOTIFICATIONS ===
+
+    const popupNotification = document.getElementById("popupNotification");
+    let qualifiedUsers = [];
+
+    // Fetch qualified users on page load
+    google.script.run.withSuccessHandler(function(data) {
+      qualifiedUsers = data;
+      showRandomPopup();
+    }).getQualifiedList();
+
+    function showRandomPopup() {
+      if (!qualifiedUsers.length) {
+        setTimeout(showRandomPopup, 8000);
+        return;
+      }
+
+      const random = qualifiedUsers[Math.floor(Math.random() * qualifiedUsers.length)];
+
+      popupNotification.textContent = `🎉 ${random.name} just won a free ${random.reward}`;
+      popupNotification.classList.add("show");
+
+      setTimeout(() => {
+        popupNotification.classList.remove("show");
+      }, 4000);
+
+      setTimeout(showRandomPopup, 8000);
+    }
+  </script>
+</body>
+</html>
